@@ -22,16 +22,16 @@ class PriceMachine:
             with open(file, newline='', encoding='utf-8') as csvfile:
                 oper = csv.reader(csvfile, delimiter=',')
                 headers = next(oper)
-                product_idx, price_idx, weight_idx = self._search_product_price_weight(headers)
+                product_column, price_column, weight_column = self._search_product_price_weight(headers)
 
                 #   Проверяем соответствие заголовков в открытом файле. Если все соответствует,
                 #   то добавляем значения в список. Если есть несоответствия, то выдаем ошибку.
                 for row in oper:
-                    if row[product_idx] and row[price_idx] and row[weight_idx]:
-                        product_name = row[product_idx].strip()
+                    if row[product_column] and row[price_column] and row[weight_column]:
+                        product_name = row[product_column].strip()
                         try:
-                            price = float(row[price_idx].strip())
-                            weight = float(row[weight_idx].strip())
+                            price = float(row[price_column].strip())
+                            weight = float(row[weight_column].strip())
                             price_kg = price / weight
 
                             self.data.append({
@@ -52,11 +52,11 @@ class PriceMachine:
         price_columns = ['цена', 'розница']
         weight_columns = ['фасовка', 'масса', 'вес']
 
-        product_idx = next(i for i, h in enumerate(headers) if h.lower() in product_columns)
-        price_idx = next(i for i, h in enumerate(headers) if h.lower() in price_columns)
-        weight_idx = next(i for i, h in enumerate(headers) if h.lower() in weight_columns)
+        product_column = next(i for i, h in enumerate(headers) if h.lower() in product_columns)
+        price_column = next(i for i, h in enumerate(headers) if h.lower() in price_columns)
+        weight_column = next(i for i, h in enumerate(headers) if h.lower() in weight_columns)
 
-        return product_idx, price_idx, weight_idx
+        return product_column, price_column, weight_column
 
     def export_to_html(self, fname='output.html'):
         """
